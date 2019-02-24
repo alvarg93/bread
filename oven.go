@@ -20,9 +20,16 @@ func Bake(r recipe) {
 	o.loafs.Store(r.Tag, l)
 }
 
-func Crumb(trail, data string) {
+type CrumbDrop struct {
+	Trail string
+	Run   string
+	Id    string
+	Data  string
+}
+
+func Crumb(crumb CrumbDrop) {
 	o.loafs.Range(func(key, l interface{}) bool {
-		l.(*loaf).crumbs <- crumbMsg{trail, data}
+		l.(*loaf).crumbs <- crumb
 		return true
 	})
 }

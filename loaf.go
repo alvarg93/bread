@@ -7,19 +7,14 @@ import (
 type loaf struct {
 	trails map[string]*trail
 	writer io.Writer
-	crumbs chan crumbMsg
-}
-
-type crumbMsg struct {
-	trail string
-	data  string
+	crumbs chan CrumbDrop
 }
 
 func newLoaf(w io.Writer) *loaf {
 	return &loaf{
 		trails: make(map[string]*trail),
 		writer: w,
-		crumbs: make(chan crumbMsg),
+		crumbs: make(chan CrumbDrop),
 	}
 }
 
@@ -27,12 +22,12 @@ func (l *loaf) baking() {
 	for {
 		select {
 		case msg := <-l.crumbs:
-			trail := l.trails[msg.trail]
+			trail := l.trails[msg.Trail]
 			if trail == nil {
-				trail = newPath()
-				l.trails[msg.trail] = trail
+				trail = newTrail()
+				l.trails[msg.Trail] = trail
 			}
-			trail.crumb(l.writer, msg.data)
+			trail.crumb(l.writer, msg)
 		default:
 		}
 	}
