@@ -2,7 +2,6 @@ package bread
 
 import (
 	"io"
-	"log"
 )
 
 type trail struct {
@@ -31,7 +30,6 @@ func (t *trail) crumb(writer io.Writer, drop CrumbDrop) {
 			c.spot(drop.Run)
 		}
 	}
-	log.Println(t.counts)
 }
 
 func (t *trail) addCrumb(writer io.Writer, id string) *crumb {
